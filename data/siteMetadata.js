@@ -1,6 +1,6 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'silly blog',
+  title: `n1bz ByteStream`,
   author: 'Zoe',
   headerTitle: '',
   description: `Zoe's Personal blog & Portfolio`,
