@@ -10,8 +10,6 @@ export default function Head() {
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
-      <meta name="twitter:image" content="/static/images/twitter-card.png" />
-      <meta property="og:image" content="/static/images/twitter-card.png"/>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
     </>
   )
