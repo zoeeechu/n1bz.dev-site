@@ -10,7 +10,7 @@ const siteMetadata = {
   siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/card.png',
-  email: 'address@yoursite.com',
+  email: 'zoeeechu@gmail.com',
   github: 'https://github.com/zoeeechu',
   twitter: 'https://twitter.com/zoeebun',
   youtube: 'https://youtube.com/@zoeebun',
