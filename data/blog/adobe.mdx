@@ -1,0 +1,96 @@
+---
+title: 'Installing Illustrator and Photoshop CC on Arch'
+date: '2023-08-20'
+lastmod: '2023-08-20'
+tags: ['Illustrator', 'Photoshop', 'Adobe', 'Linux', 'Arch', 'Guide']
+draft: false
+summary: 'Creating Art on Arch: Installing Illustrator and Photoshop CC!'
+images: ['/static/images/card.png']
+---
+*[IMPORTANT]: **This Article/Blog post does not condone piracy I have 2 Adobe suite subscriptions, this is for educational purposes only! So others like me who have Adobe subscriptions/licenses can use Illustrator and Photoshop on Linux***
+
+--- 
+
+As you might know, I have been setting up a new Arch installation as of late. Today, I was looking into installing my Adobe toolset on here, only to learn that Adobe doesn't support it. However, by using a few tricks, we can actually get both Illustrator and Photoshop running on our installation, thanks to these two handy repos for Illustrator and Photoshop by Viktor Ghorbali. Can we get them running? 
+
+Well, not quite, because while these repos do work, there are a few minor tweaks we have to make to get them to work! Let's start with Illustrator since it's easier as of right now. However, be sure to read both because there are a few things we shall touch on in the Illustrator installation that will be glossed over in the Photoshop installation.
+
+## Installing Illustrator 
+
+To install Illustrator, we need to run a few shell commands. You can find the full guide and requirements for using Viktor's script here.
+
+First, let's install Wine and Winetricks:
+
+```
+sudo pacman -S wine winetricks
+```
+
+Then, we clone the repo and chmod the script:
+
+```
+git clone https://github.com/Gictorbit/illustratorCClinux.git
+cd illustratorCClinux
+chmod +x setup.sh
+```
+
+Usually, we would run the script; however, we need to change one line in the script to get it to work. The file we need to edit can be found at this path: `~/illustratorCClinux/scripts/illustratorSetup.sh`.
+
+We want to change the link in line `68` to this [link](https://downloads.runebase.io/illustratorCC17.tgz).
+
+Now, we can run the script:
+
+```
+./setup.sh
+```
+
+You should be greeted with a CLI:
+
+![CLI_ILLUSTRATOR](/static/images/Illustratorsetup.png)
+
+Let's choose option `1`.
+
+After the script runs for a bit, this window should pop up:
+
+![wine](/static/images/wine.png)
+
+This is the Wine configuration for the application we are installing, in this case, *Illustrator*. Let's change the `Windows Version` to `Windows 7`, hit apply and OK, and let the script continue.
+
+And just like that, we have Illustrator CC installed!
+
+## Installing Photoshop
+
+Alright, now we will install Photoshop, which will actually be a bit of a longer installation.
+
+First, we need to once again clone the repo and chmod the script:
+
+```
+git clone https://github.com/Gictorbit/photoshopCClinux.git
+cd photoshopCClinux
+chmod +x setup.sh
+```
+
+This time, instead of editing the link in the setup script, we need to download two files since their links are broken. One is [photoshopCC-V19.1.6-2018x64.tgz](https://drive.google.com/file/d/1axKU4pLD6eju_mX0cRZ_J-uWhHo6Cg8j/view), and the second is [replacement.tgz](https://drive.google.com/file/d/1AD_a6XfaiFY_eivEMdCajvjxRC-1P-NY/view). We then want to place these files in `~/.cache/photoshopCCV19`. If the file doesn't exist, create it.
+
+Once done, we can run the script:
+
+```
+./setup.sh
+```
+
+You should be greeted with a CLI:
+
+![CLI_PHOTOSHOP](/static/images/Photoshopsetup.png)
+
+Let's choose option `1`.
+
+Again, after the script runs for a bit, this window should pop up:
+
+![wine](/static/images/wine.png)
+
+Let's do the same thing we did for Illustrator, then hit apply and OK.
+
+Now, we can sit back and let the installation run, just like last time.
+
+> Sidenote: This installation will have a lot of popups for different requirements for installation, such as Microsoft C++, etc. Please install them.
+
+And with that, you have successfully installed Photoshop CC on Arch!
