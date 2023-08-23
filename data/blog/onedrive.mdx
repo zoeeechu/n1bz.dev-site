@@ -1,0 +1,103 @@
+---
+title: 'Killing Onedrive for good!'
+date: '2023-08-22'
+lastmod: '2023-08-22'
+tags: ['Scripting', 'Windows', 'OneDrive', 'Powershell', 'Script Breakdown', 'Guide', 'Bloatware']
+draft: true
+summary: 'A battle of wits: The end to OneDrive bloatware'
+images: ['/static/images/card.png']
+---
+
+
+
+## Introduction
+
+While working my tech job recently, I stumbled across a significant challenge: OneDrive. 
+You see, I needed an automated method for thoroughly uninstalling OneDrive without having to do it manually,
+I needed to Integrating this process into my computer setup script.
+
+During my research, I discovered a script by TERRAOperative, that can be found [here](https://github.com/TERRAOperative/OneDrive-Uninstaller/tree/master). 
+While the script seemed capable at first glance, it turned out to be somewhat outdated and didn't quite get the job done. Perhaps Microsoft had become smarter
+at stopping these efforts. It appeared that merely deleting the OneDrive folder wasn't enough for a clean uninstall.
+
+So I dug further and found that invoking the command `OneDriveSetup.exe /Uninstall` would get OneDrive to Uninstall itself resulting in a clean uninstallation.
+The catch was that `OneDriveSetup.exe` was located within a folder named after the OneDrive version, indicated by a string of numbers. This ment that there was
+no absolute path to `OneDriveSetup.exe` this posed a challenge, as each computer's path could be different.
+
+For instance, the path might look like this:
+
+`C:\Program Files\Microsoft OneDrive\23.127.0618.0001\OneDriveSetup.exe`
+
+with the sting of numbers being totally diffrent on a seprate machine
+
+
+To fix this, I got to work making a script, the plan of action was simple:
+
+1. Test multiple paths to locate the `Microsoft OneDrive` installation.
+2. Identify folders containing version numbers from these paths.
+3. Invoke the `/Uninstall` command using these paths.
+4. Clean up registry keys and other leftovers.
+
+
+
+## So lets get Cracking!
+
+Firstly, we need to close OneDrive to make folder edits:
+
+```
+TASKKILL /F /IM OneDrive.exe
+```
+
+Next, we'll remove unnecessary registry entries for a clean installation. Credit goes to TERRAOperative for this step:
+
+```
+ REG Delete "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
+ REG Delete "HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
+ REG ADD "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v System.IsPinnedToNameSpaceTree /d "0" /t REG_DWORD /f
+```
+
+Now, let's store the paths to be checked in an array for future reference and then verify their existence:
+```
+ $p = 'Program Files'
+ $o = 'Microsoft OneDrive'
+    $pathsToCheck = @(
+        "C:\Users\$env:username\AppData\Local\Microsoft\OneDrive\",
+        "C:\${p}\${o}\"
+    )
+
+    foreach ($path in $pathsToCheck) {
+        $resolvedPath = [System.IO.Path]::GetFullPath($path)
+        if (Test-Path -Path $resolvedPath) {
+            $folders = Get-ChildItem -Path $resolvedPath -Directory
+
+        }
+        else {
+            Write-Host "OneDrive path '$resolvedPath' not found."
+        }
+    }
+```
+
+You might wondering why one of the paths is defined in such a complicated manner `$p = 'Program Files' $o = 'Microsoft OneDrive' "C:\${p}\${o}\".` the reason: because simply quoting the file path doesn't work due to Windows not accounting for spaces. This somewhat janky fix, fixes that issue.
+
+Back to the script, let's search the given paths for folders with version numbers using the "^\d" function:
+
+```
+ foreach ($folder in $folders) {
+    if ($folder.Name -match "^\d") {
+       
+    }
+ }
+```
+
+Now, let's construct the path, add OneDriveSetup.exe, and invoke the command:
+
+```
+ $command = Join-Path -Path $resolvedPath -ChildPath "${folder}\OneDriveSetup.exe"
+ $arg = "/Uninstall"
+ Start-Process -FilePath $command -ArgumentList $arg -Wait
+```
+
+And there you have it! A future-proof solution that adapts to any OneDrive version change. Additionally any new file/installation paths can easily be incorporated into the array.
+
+For the refined script and more minor adjustments, you can find it [here](https://gist.github.com/zoeeechu/038e0c82550ce2a79e4d63aef11d5326). If you find this script helpful, please consider starring the repository, it would mean alot! 
+
