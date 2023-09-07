@@ -10,5 +10,5 @@ export const components: MDXComponents = {
   TOCInline,
   a: CustomLink,
   pre: Pre,
- // BlogNewsletterForm,
+  BlogNewsletterForm,
 }
