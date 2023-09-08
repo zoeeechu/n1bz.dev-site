@@ -6,8 +6,8 @@ const siteMetadata = {
   description: `Zoe's Personal blog & Portfolio`,
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteUrl: 'https://www.n1bz.dev',
+  siteRepo: 'https://github.com/zoeeechu/n1bz.dev-site',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/card.png',
   email: 'zoeeechu@gmail.com',
