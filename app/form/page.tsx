@@ -1,9 +1,7 @@
 'use client'
 import React from 'react'
 import Giscus from '@giscus/react'
-import { genPageMetadata } from 'app/seo'
 
-export const metadata = genPageMetadata({ title: 'Form' })
 
 export default function FormPage() {
   return (
