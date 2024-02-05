@@ -3,10 +3,13 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Giscus from '@giscus/react'
+import { useTheme } from 'next-themes'
 
 const MAX_DISPLAY = 5
 
 export default function Home({ posts }) {
+  const { theme } = useTheme()
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -52,6 +55,21 @@ export default function Home({ posts }) {
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                           {summary}
                         </div>
+                        <Giscus
+                          id="Questions"
+                          repo="zoeeechu/n1bz.dev-site"
+                          repoId="R_kgDOKFaagw"
+                          category="Q&A"
+                          categoryId="DIC_kwDOKFaag84CZJ4O"
+                          mapping="pathname"
+                          term="Welcome to the formpage"
+                          reactionsEnabled="1"
+                          emitMetadata="0"
+                          inputPosition="bottom" // Position the Giscus component at the bottom
+                          theme={theme}
+                          lang="en"
+                        />
+                        <div style={{ height: '40px', visibility: 'hidden' }}></div>
                       </div>
                       <div className="text-base font-medium leading-6">
                         <Link
@@ -82,9 +100,7 @@ export default function Home({ posts }) {
         </div>
       )}
       {siteMetadata.newsletter?.provider && (
-        <div className="flex items-center justify-center pt-4">
-          {/*<NewsletterForm />*/}
-        </div>
+        <div className="flex items-center justify-center pt-4">{/*<NewsletterForm />*/}</div>
       )}
     </>
   )

@@ -1,9 +1,8 @@
 'use client'
 import React from 'react'
 import Giscus from '@giscus/react'
-import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
-import ThemeSwitch from 'components/ThemeSwitch'
+
 
 
 export default function FormPage() {
