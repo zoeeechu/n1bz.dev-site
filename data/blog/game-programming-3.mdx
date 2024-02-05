@@ -1,0 +1,129 @@
+---
+title: 'Game Programming Lesson 3'
+date: '2023-09-08'
+lastmod: '2023-09-08'
+tags: ['Game Programming','C++', 'Lesson']
+draft: true
+summary: 'heaps in c++'
+images: ['/static/images/card.png']
+---
+
+https://pythontutor.com/cpp.html#mode=edit
+
+To have a object in the heap you need a pointer to a object in the stack:
+
+Heap - `Vec3* v_ptr = new` 
+Stack - `Vec3(9, 3, 2);`
+
+
+to then remove it from the heap:
+
+`delete v_ptr;`
+
+
+lets say we have a simple vector class:
+
+```cpp
+#include <iostream>
+
+
+// at least the size of the attributes added together
+// 4 + 4 + 4 + 1 = 13 + padding
+class Vec3 {
+public:
+	float x;
+	float y;
+	float z;
+	char d = 'u';
+
+	/// <summary>
+	/// A construcotr requirig up to three coordinates: x, y, and z
+	/// </summary>
+	Vec3(float x_ = 0.0f, float y_ = 0.0f, float z_ = 0.0f) {
+		x = x_;
+		y = y_;
+		z = z_;
+	}
+
+	/// <summary>
+	/// Print out the x, y, and z value of this vector
+	/// </summary>
+	void print() {
+		std::cout << x << ", " << y << ", " << z << std::endl;
+	}
+};
+
+/// Return the addition of the two vectors a and b
+// 16 + 16
+Vec3 addVec(Vec3 a, Vec3 b) { // a and b will be coppied
+	return Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+}
+
+// 8 + 8
+Vec3 addVecPtr(Vec3* a, Vec3* b) { // a and b are pointers
+	return Vec3(a->x + b->x, a->y + b->y, a->z + b->z);
+}
+
+// 
+Vec3 addVecRef(const Vec3& a, const Vec3& b) { // it guarantees that the parameter/input is not changed
+	return Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+}
+
+int main() {
+
+	//std::cout << sizeof(Vec3) << std::endl;
+	Vec3 v1 = Vec3(4.0f, 5.0f, 4.0f); // stack
+	Vec3 v2;
+	
+	Vec3* v1_ptr = &v1; // stack
+
+	//v1.print();
+	//(*v1_ptr).print();
+	//v1_ptr->print(); // pointer calling a method
+
+	/*addVec(v1, v2);
+	addVecPtr(v1_ptr, &v2);
+	addVecRef(v1, v2);*/
+
+}
+```
+
+notice that everything is in the in the stack to change this we can do:
+
+```cpp
+Vec3* v2_ptr = new Vec3(); // v2_ptr is in the stack
+// Vec3() object is in the heap
+```
+
+editing:
+
+```cpp
+
+
+v2_ptr->y += 9; //changing y to 9
+v2_ptr->print();
+
+delete v2_ptr; // object in the heap is deleted
+// v2_ptr is still in the stack
+
+v2_ptr = nullptr; //safegaurding //null can = 0 so use nullptr
+
+
+v2_ptr = & v1;
+v2_ptr = new Vec3(9, 4, 2)
+
+```
+
+
+major issues with dynamic allocation
+- memory leak
+- deleting object and not reseting where the pointer points toward
+    - makesure to set your pointer to nullptr if its no longer needed (at least meanwhile)
+
+- memory leak 
+
+when you create a ptr in function whne the fuction is out of scope if the there is no deallocation of ptr 
+that is called a memory leak
+
+if you re assign pointer before deletin = memory leak 
+
