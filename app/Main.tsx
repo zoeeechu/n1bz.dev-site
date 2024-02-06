@@ -60,22 +60,8 @@ export default function Home({ posts }) {
                           {summary}
                         </div>
                       </div>
-                      <div className="giscus-container">
-                        <Giscus
-                          id={`${slug}`}
-                          repo="zoeeechu/n1bz.dev-site"
-                          repoId="R_kgDOKFaagw"
-                          category={title}
-                          categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
-                          mapping="specific"
-                          term={`blog/${title}`}
-                          reactionsEnabled="1"
-                          emitMetadata="0"
-                          inputPosition="bottom"
-                          theme={theme}
-                          lang="en"
-                        />
-                      </div>
+                      <script src="https://giscus.app/widget?origin=https%3A%2F%2Fwww.n1bz.dev%2F%23what-the-fox-says-devlog&session=333369b2a03bcbfb9148c4515F%2BhDY4JQM2P35T4TKJw4l8nCLBGQwpAtxygvQ03xaVl6zPDammYZlFtuTlXau9zjHNje1i4oCN4PifuUFuQ8K%2FqgQRmVrk2wAkhTOP8pV2MIwkaSF%2B5AyHrB04%3D&repo=zoeeechu%2Fn1bz.dev-site&repoId=R_kgDOKFaagw&category=Devlog+-+What+the+fox+says&categoryId=DIC_kwDOKFaag84CZJ4N&term=blog%2FDevlog+-+What+the+fox+says&number=&strict=0&reactionsEnabled=1&emitMetadata=0&inputPosition=bottom&theme=dark&description=Zoe%27s+Personal+blog+%26+Portfolio&backLink=https%3A%2F%2Fwww.n1bz.dev%2F"></script >
+                     
                       <div className="text-base font-medium leading-6">
                         <Link
                           href={`/blog/${slug}`}
