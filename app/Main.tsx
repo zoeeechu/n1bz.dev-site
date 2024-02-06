@@ -1,5 +1,5 @@
 'use client'
-import React,  { useEffect }  from 'react'
+import React, { useEffect } from 'react'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -7,8 +7,6 @@ import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 import Giscus from '@giscus/react'
 import { useTheme } from 'next-themes'
-
-
 
 const MAX_DISPLAY = 5
 
@@ -61,6 +59,22 @@ export default function Home({ posts }) {
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                           {summary}
                         </div>
+                      </div>
+                      <div className="giscus-container">
+                        <Giscus
+                          id={`${slug}`}
+                          repo="zoeeechu/n1bz.dev-site"
+                          repoId="R_kgDOKFaagw"
+                          category={title}
+                          categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
+                          mapping="specific"
+                          term={`blog/${title}`}
+                          reactionsEnabled="1"
+                          emitMetadata="0"
+                          inputPosition="bottom"
+                          theme={theme}
+                          lang="en"
+                        />
                       </div>
                       <div className="text-base font-medium leading-6">
                         <Link
