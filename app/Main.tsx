@@ -17,7 +17,7 @@ export default function Home({ posts }) {
 
   useEffect(() => {
     // Select all elements with the class 'gsc-comments'
-    const commentElements = document.querySelectorAll('.gsc-comments');
+    const commentElements = document.querySelectorAll('gsc-comments');
 
     // Iterate over each comment element and remove it from the DOM
     commentElements.forEach(commentElement => {
