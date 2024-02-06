@@ -40,6 +40,10 @@
   content: attr(line);
 }
 
+.giscus-container .gsc-comment-box {
+  display: none;
+}
+
 /* Token styles */
 /**
  * MIT License
