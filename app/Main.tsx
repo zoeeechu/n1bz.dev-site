@@ -29,7 +29,7 @@ export default function Home({ posts }) {
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title, summary, tags } = post
-            const mapping = `pathname/${title}`;
+
             return (
               <li key={slug} className="py-12">
                 <article>
@@ -67,7 +67,7 @@ export default function Home({ posts }) {
                           repoId="R_kgDOKFaagw"
                           category={title}
                           categoryId="DIC_kwDOKFaag84CZJ4O"
-                          mapping="pathname"
+                          mapping={`${siteMetadata.siteUrl}/${title}`}
                           term="Welcome to the formpage"
                           reactionsEnabled="1"
                           emitMetadata="0"
