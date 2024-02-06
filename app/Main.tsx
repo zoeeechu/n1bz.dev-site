@@ -15,16 +15,6 @@ const MAX_DISPLAY = 5
 export default function Home({ posts }) {
   const { theme } = useTheme()
 
-  //useEffect(() => {
-  //  // Select all elements with the class 'gsc-comments'
-  //  const commentElements = document.querySelectorAll('gsc-comments');
-//
-  //  // Iterate over each comment element and remove it from the DOM
-  //  commentElements.forEach(commentElement => {
-  //    commentElement.remove();
-  //  });
-  //}, []);
-
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
