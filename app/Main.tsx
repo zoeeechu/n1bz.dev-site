@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React,  { useEffect }  from 'react'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -8,17 +8,22 @@ import NewsletterForm from 'pliny/ui/NewsletterForm'
 import Giscus from '@giscus/react'
 import { useTheme } from 'next-themes'
 
+
+
 const MAX_DISPLAY = 5
 
 export default function Home({ posts }) {
   const { theme } = useTheme()
 
-  const commentElements = document.querySelectorAll('.gsc-comments');
+  useEffect(() => {
+    // Select all elements with the class 'gsc-comments'
+    const commentElements = document.querySelectorAll('.gsc-comments');
 
-// Iterate over each comment element and remove it from the DOM
-commentElements.forEach(commentElement => {
-    commentElement.remove();
-});
+    // Iterate over each comment element and remove it from the DOM
+    commentElements.forEach(commentElement => {
+      commentElement.remove();
+    });
+  }, []);
 
   return (
     <>
