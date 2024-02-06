@@ -67,8 +67,8 @@ export default function Home({ posts }) {
                           repoId="R_kgDOKFaagw"
                           category={title}
                           categoryId="DIC_kwDOKFaag84CZJ4O"
-                          mapping={`${siteMetadata.siteUrl}/${title}`}
-                          term="Welcome to the formpage"
+                          mapping='specific'
+                          term={`pathname/${title}`}
                           reactionsEnabled="1"
                           emitMetadata="0"
                           inputPosition="bottom"
