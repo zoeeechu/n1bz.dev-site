@@ -65,7 +65,7 @@ export default function Home({ posts }) {
                           id={`${slug}`}
                           repo="zoeeechu/n1bz.dev-site"
                           repoId="R_kgDOKFaagw"
-                          category={slug}
+                          category={title}
                           categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
                           mapping='specific'
                           term={`blog/${title}`}
@@ -75,6 +75,8 @@ export default function Home({ posts }) {
                           theme={theme}
                           lang="en"
                         />
+
+                        <div style={{ height: '40px', visibility: 'hidden' }}></div>
 
                         <div style={{ height: '40px', visibility: 'hidden' }}></div>
                       </div>
