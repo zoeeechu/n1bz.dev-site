@@ -66,9 +66,8 @@ export default function Home({ posts }) {
                           repo="zoeeechu/n1bz.dev-site"
                           repoId="R_kgDOKFaagw"
                           category={title}
-                          categoryId="DIC_kwDOKFaag84CZJ4O"
                           mapping='specific'
-                          term={`pathname/${title}`}
+                          term={`blog/${title}`}
                           reactionsEnabled="1"
                           emitMetadata="0"
                           inputPosition="bottom"
