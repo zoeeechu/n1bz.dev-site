@@ -66,6 +66,7 @@ export default function Home({ posts }) {
                           repo="zoeeechu/n1bz.dev-site"
                           repoId="R_kgDOKFaagw"
                           category={title}
+                          categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
                           mapping='specific'
                           term={`blog/${title}`}
                           reactionsEnabled="1"
