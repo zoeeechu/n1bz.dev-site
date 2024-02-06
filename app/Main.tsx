@@ -60,7 +60,24 @@ export default function Home({ posts }) {
                           {summary}
                         </div>
                       </div>
-                     
+
+                      <script
+                        src="https://giscus.app/client.js"
+                        id={`${slug}`}
+                        data-repo="zoeeechu/n1bz.dev-site"
+                        data-repo-id="R_kgDOKFaagw"
+                        data-category={title}
+                        data-category-id={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
+                        data-mapping="specific"
+                        data-term={`blog/${title}`}
+                        data-reactions-enabled="1"
+                        data-emit-metadata="0"
+                        data-input-position="bottom"
+                        data-theme={theme}
+                        data-lang="en"
+                        data-giscus-config-url="app/giscus.json"
+                      ></script>
+
                       <div className="text-base font-medium leading-6">
                         <Link
                           href={`/blog/${slug}`}
