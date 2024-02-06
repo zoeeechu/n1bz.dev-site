@@ -61,14 +61,7 @@ export default function Home({ posts }) {
                           {summary}
                         </div>
                       </div>
-
-                      <GiscusWidget
-                      slug={`${slug}`}
-                      title={title}
-                      theme={theme}
-                      categoryid={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
-                      />
-
+  
                       <div className="text-base font-medium leading-6">
                         <Link
                           href={`/blog/${slug}`}

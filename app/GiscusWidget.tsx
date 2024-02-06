@@ -18,7 +18,7 @@ const GiscusWidget = ({ slug, title, theme, categoryid}) => {
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'bottom');
     script.setAttribute('data-lang', 'en');
-    script.setAttribute('data-giscus-config-url', 'app/giscus.json'); // Update the path to your giscus.json file
+    script.setAttribute('data-giscus-config-url', 'app/giscus.json');
     if (theme) {
       script.setAttribute('data-theme', theme);
     }
