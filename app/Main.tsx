@@ -62,10 +62,10 @@ export default function Home({ posts }) {
                         </div>
 
                         <Giscus
-                          id="Questions"
+                          id={`${slug}`}
                           repo="zoeeechu/n1bz.dev-site"
                           repoId="R_kgDOKFaagw"
-                          category={title}
+                          category={slug}
                           categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
                           mapping='specific'
                           term={`blog/${title}`}
