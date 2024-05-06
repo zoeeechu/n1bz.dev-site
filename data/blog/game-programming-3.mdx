@@ -1,16 +1,21 @@
 ---
-title: 'Game Programming Lesson 3'
+title: 'Understanding Dynamic Memory Allocation'
 date: '2023-09-08'
-lastmod: '2023-09-08'
-tags: ['Game Programming','C++', 'Lesson']
+lastmod: '2024-05-06'
+tags: ['Game Programming','C++', 'Lesson' ]
 draft: true
-summary: 'heaps in c++'
+summary: 'Understanding Dynamic Memory Allocation in C++: Heap vs. Stack'
 images: ['/static/images/card.png']
 ---
 
+Dynamic memory in C++ is very powerful, but it comes with its own set of rules. Let's break down the difference between heap and stack memory and learn some tricks to avoid common traps like memory leaks.
+
+> *you can use the link below to experiment*
 https://pythontutor.com/cpp.html#mode=edit
 
-To have a object in the heap you need a pointer to a object in the stack:
+Heap memory is your flexible buddy. You can create objects with new and get a pointer to them. For example, `Vec3* v_ptr = new Vec3();` puts a Vec3 object on the heap and hands you its address. 
+On the other hand, objects created directly, <br/> like `Vec3 v1;`, find a home on the stack.
+
 
 Heap - `Vec3* v_ptr = new` 
 Stack - `Vec3(9, 3, 2);`
