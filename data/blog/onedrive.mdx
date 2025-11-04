@@ -4,7 +4,7 @@ date: '2023-08-22'
 lastmod: '2023-08-22'
 tags: ['Scripting', 'Windows', 'OneDrive', 'Powershell', 'Script Breakdown', 'Guide', 'Bloatware']
 draft: false
-summary: 'A battle of wits: The end to OneDrive bloatware'
+summary: ' My Fight Against Microsoft Bloatware RAHHHHH '
 images: ['/static/images/card.png']
 ---
 
@@ -12,32 +12,33 @@ images: ['/static/images/card.png']
 
 ## Introduction
 
-While working my tech job recently, I stumbled across a significant challenge: OneDrive. 
-You see, I needed an automated method for thoroughly uninstalling OneDrive without having to do it manually,
-I needed to Integrating this process into my computer setup script.
+While I was working at my tech job recently, I was tasked with setting up a heap of Surface Pros... yikes. 
+Even worse, each one of them was already set up with all the Microsoft bloatware and I mean *ALL* of it.
 
-During my research, I discovered a script by TERRAOperative, that can be found [here](https://github.com/TERRAOperative/OneDrive-Uninstaller/tree/master). 
-While the script seemed capable at first glance, it turned out to be somewhat outdated and didn't quite get the job done. Perhaps Microsoft had become smarter
-at stopping these efforts. It appeared that merely deleting the OneDrive folder wasn't enough for a clean uninstall.
+The worst part? OneDrive. Not only did each of them have OneDrive, but they were all using different versions what the *FUCK!* 
+At first, I thought, hey, I could just remove it with a simple script, but it wasn’t that easy *it’s never* that easy...
 
-So I dug further and found that invoking the command `OneDriveSetup.exe /Uninstall` would get OneDrive to Uninstall itself resulting in a clean uninstallation.
-The catch was that `OneDriveSetup.exe` was located within a folder named after the OneDrive version, indicated by a string of numbers. This ment that there was
-no absolute path to `OneDriveSetup.exe` this posed a challenge, as each computer's path could be different.
+You see, the way Microsoft stores these versions is like this:
 
-For instance, the path might look like this:
+`C:\Program Files\Microsoft OneDrive\23.127.0618.0001\...`
+
+See that string of numbers? That, my friends, is the version number. So I couldn’t just do a one-script-fits-all solution... right? 
+WRONG. Of course I could I just had to do a little bit of tomfoolery, hehehe.
+
+So here was my process. First, like any good programmer, I researched and found a script by TERRAOperative, which can be found [here](https://github.com/TERRAOperative/OneDrive-Uninstaller/tree/master). 
+Seemed pretty capable, right? While it seemed like it at first glance, it didn’t get the full clean uninstall.
+
+So I dug further and found that invoking the command `OneDriveSetup.exe /Uninstall` would get OneDrive to uninstall itself  
+a full clean uninstall. The catch was that `OneDriveSetup.exe` was located within our nasty version path:
 
 `C:\Program Files\Microsoft OneDrive\23.127.0618.0001\OneDriveSetup.exe`
 
-with the string of numbers being totally diffrent on a seprate machine
+To fix this, I got to work making a script. The plan of action was simple:
 
-
-To fix this, I got to work making a script, the plan of action was simple:
-
-1. Test multiple paths to locate the `Microsoft OneDrive` installation.
-2. Identify folders containing version numbers from these paths.
-3. Invoke the `/Uninstall` command using these paths.
+1. Test multiple paths to locate the `Microsoft OneDrive` installation. 
+2. Identify folders containing version numbers from these paths. 
+3. Invoke the `/Uninstall` command using these paths. 
 4. Clean up registry keys and other leftovers.
-
 
 
 ## So lets get Cracking!
@@ -60,32 +61,35 @@ Now, let's store the paths to be checked in an array for future reference and th
 ```
  $p = 'Program Files'
  $o = 'Microsoft OneDrive'
-    $pathsToCheck = @(
-        "C:\Users\$env:username\AppData\Local\Microsoft\OneDrive\",
-        "C:\${p}\${o}\"
-    )
+  $pathsToCheck = @(
+    "C:\Users\$env:username\AppData\Local\Microsoft\OneDrive\",
+    "C:\${p}\${o}\"
+  )
 
-    foreach ($path in $pathsToCheck) {
-        $resolvedPath = [System.IO.Path]::GetFullPath($path)
-        if (Test-Path -Path $resolvedPath) {
-            $folders = Get-ChildItem -Path $resolvedPath -Directory
+  foreach ($path in $pathsToCheck) {
+    $resolvedPath = [System.IO.Path]::GetFullPath($path)
+    if (Test-Path -Path $resolvedPath) {
+      $folders = Get-ChildItem -Path $resolvedPath -Directory
 
-        }
-        else {
-            Write-Host "OneDrive path '$resolvedPath' not found."
-        }
     }
+    else {
+      Write-Host "OneDrive path '$resolvedPath' not found."
+    }
+  }
 ```
+You might be wondering, hey Zoe, why is one of the paths so complicated  
+`$p = 'Program Files' $o = 'Microsoft OneDrive' "C:\${p}\${o}\".` 
 
-You might wondering why one of the paths is defined in such a complicated manner `$p = 'Program Files' $o = 'Microsoft OneDrive' "C:\${p}\${o}\".` the reason: because simply quoting the file path doesn't work due to Windows not accounting for spaces. This somewhat janky fix, fixes that issue.
+Because simply quoting the file path doesn't work Windows does not account for spaces properly. 
+This was a somewhat janky fix, but ehhhhhh... I just needed the job done.
 
-Back to the script, let's search the given paths for folders with version numbers using the "^\d" function:
+Back to the script, let's search the given paths for folders with version numbers using the `"^\d"` function:
 
 ```
  foreach ($folder in $folders) {
-    if ($folder.Name -match "^\d") {
-       
-    }
+  if ($folder.Name -match "^\d") {
+    
+  }
  }
 ```
 
@@ -96,8 +100,12 @@ Now, let's construct the path, add OneDriveSetup.exe, and invoke the command:
  $arg = "/Uninstall"
  Start-Process -FilePath $command -ArgumentList $arg -Wait
 ```
+And that's about it! A script that adapts no matter what version of OneDrive you're using it will *SMITE* it regardless! 
+If we ever need to add any new file paths, we can just add them to the array.
 
-And there you have it! A future-proof solution that adapts to any OneDrive version change. Additionally any new file/installation paths can easily be incorporated into the array.
+You can find the final script [here](https://gist.github.com/zoeeechu/038e0c82550ce2a79e4d63aef11d5326). 
+I added a bit of polish, that's all!
 
-For the refined script and more minor adjustments, you can find it [here](https://gist.github.com/zoeeechu/038e0c82550ce2a79e4d63aef11d5326). If you find this script helpful, please consider starring the repository, it would mean alot! 
+If you find this script helpful, please consider starring the repository it would mean a lot!
+
 

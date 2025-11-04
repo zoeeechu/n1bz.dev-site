@@ -1,0 +1,276 @@
+---
+title: 'Hooking Directx11 to Display ImGUI in Hello Kitty'
+date: '2025-11-02'
+lastmod: '2025-11-02'
+tags: [
+ 'C++',
+ 'DirectX 11',
+ 'ImGui',
+ 'Graphics Programming',
+ 'DLL Injection',
+ 'Function Hooking',
+ 'Reverse Engineering',
+ 'Overlay Rendering',
+ 'Memory'
+]
+draft: false
+summary: 'how I hooked DirectX 11 in Hello Kitty Island Adventure to render custom ImGui overlays.'
+images: ['/static/images/card.png']
+---
+
+> 
+> Disclaimer: This post is for educational purposes only. The techniques described here including DirectX hooking and ImGui overlay rendering were used solely for learning about memory, DLL injection, and graphics programming.
+> I do not condone or support using these methods to cheat, gain unfair advantages, or modify commercial games in ways that violate their terms of service. I’m just a student who loves learning about the internals of games, memory, and graphics APIs.
+
+
+So recently I have really been enjoying Hello Kitty Island Adventure. It's been a little guilty pleasure...
+
+![image](https://i.imgur.com/6Fu7fyu.gif)
+
+However, while I was sitting down one night all cozy in a huge sweater, some juice, and my controller, it dawned on me. Wouldn't it be so fun to mess with this game?
+
+So I started scheming, plotting even. I wanted to do a few things to this game and tear it apart, not for anything malicious of course, just because I love breaking things open, messing with them, seeing how they work. I personally find it fascinating.
+
+So I wanted to do a few things
+1. get a custom overlay working on this game
+2. modify my save file
+3. hook functions of this game and do some fun stuff...
+
+However, I quickly found out that not only was this game secured by Denuvo, but it also had its save files encrypted. So we will shelf our second two plans for now...
+
+Let's just get a harmless UI working in the game. How would you even pull that off?
+
+hmmmmm...
+
+
+well, turns out it's really simple 😎 and it feels really fucking sick doing it. 
+did you know that you can hook any function in a given program by knowing its given memory offset? 
+> memory offsets aren't static... but we will get back to that hehe, side note if you don't know what a memory offset is 
+> you should check [this]("") out
+
+or let's take it a step back. you can hook a DLL in a certain program, in our case DirectX11, and tell it to do things? 
+well I hear you ask zoe, how would does that even work and how would you even pull that off? let me show you hehe
+
+so we know that DLLs are executables that have certain functionalities that programs like hello kitty use for certain things. 
+in this case DirectX11 is a rendering API that lets our game render things to the scene! so it's what's responsible for making sure 
+I get to see my favorite characters in 3D on my screen. it talks to the GPU and says hey buddy load this shit for me. 
+> or ehem... cough if you wanna sound like you know what you're talking about "DLLs are Dynamic-Link Libraries which contain compiled functions and data that 
+> other programs can call at runtime they aren't standalone programs you can’t “run” a DLL directly it’s loaded by another executable at runtime.
+
+but it's more fun to not overcomplicate things. as long as we both know we know what we're talking about, why be boring
+
+so how would we call those functions if we're not the program ourselves? well, what if we were? that's where injecting our own DLL into the process comes in, 
+which is actually simpler to do than you might think. in my case I used a program called [Process Hacker]("https://systeminformer.sourceforge.io/") 
+there are other ways, but this is probably the simplest for now
+
+
+so let's create a DLL to inject! 
+how hard could it be? I mean I do know how to make a DLL aaaanndd I know how ImGui works from class this anddddd andddd DirectX is kinda like 
+Vulkan right? I know Vulkan!
+
+so I started by making a Dynamic Link Library project in Visual Studio
+
+![image](/static/images/dll.png)
+
+in our main we should have something along the lines of:
+
+```cpp 
+BOOL WINAPI DllMain(HINSTANCE dllInstance, DWORD notifyReason, LPVOID reasonData) { ... }
+```
+this is our main function, our entry point. let's populate it to tell it to create a new thread with a function called render
+
+
+```cpp
+static HMODULE currentModuleHandle;
+HANDLE uiThread = nullptr;
+
+BOOL WINAPI DllMain(HINSTANCE dllInstance, DWORD notifyReason, LPVOID reasonData) {
+
+ // if we attached to a process do this:	
+ if (notifyReason == DLL_PROCESS_ATTACH)
+ {
+   DisableThreadLibraryCalls(dllInstance);
+   currentModuleHandle = dllInstance;
+	 //                       start a new thread routine of our Render func
+   uiThread = CreateThread(nullptr, NULL, (LPTHREAD_START_ROUTINE)Render, nullptr, NULL, nullptr);
+ }
+
+// if we detach lets do this
+ if (notifyReason == DLL_PROCESS_DETACH)
+   TerminateThread(uiThread, 0);
+
+ return TRUE;
+}
+
+```
+
+but wait, how, what do I call, what do I do in render? I know I need the window handle... hmmm so I looked it up, turns out someone's done this before 
+> https://github.com/adamhlt/D3D11-Overlay-ImGui/
+
+well would you look at that, I can reference their code to point me in the right direction!
+
+the render function will handle all of the rendering required, so it is a bit long. I will briefly cover it; however, this isn't a tutorial. 
+if you want a full example, I would recommend checking out the repo above not only just using it but trying to reference it 
+for your own project!
+
+usually, I like to call it OnCreate or something along those lines; however, for the simplicity of using adamhlt's repo as a reference, 
+I kept it Render for now...
+
+turns out our render function will have to do a few main things:
+
+- Get the current window of our game `GetWindowThreadProcessId(hWindow, &processId);`
+- Create and register a window class for our overlay
+- Show and update the registered window
+- Initialize ImGui
+- Have a main update loop that calls new ImGui frames and checks for window resize etc.
+- Cleanup once we have exited the update loop
+
+creating a window class is actually really simple just like a simple fill-in-the-blank! 
+registering it seems long but doesn’t have much going for it either
+
+basically reminds me of Vulkan at this point hehe
+
+
+```cpp
+
+	//our window class
+  WNDCLASSEX wc;
+
+  wc.cbClsExtra = NULL;
+  wc.cbSize = sizeof(WNDCLASSEX); 
+  wc.cbWndExtra = NULL;
+  wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0, 0, 0));
+  wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+  wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+  wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
+  wc.hInstance = GetModuleHandle(nullptr);
+  wc.lpfnWndProc = WindowProcess; //make sure you pass this too ImGui_ImplWin32_WndProcHandler
+  wc.lpszClassName = _T("My Overylay");
+  wc.lpszMenuName = nullptr;
+  wc.style = CS_VREDRAW | CS_HREDRAW;
+
+	//Register time
+	::RegisterClassEx(&wc);
+  const HWND hwnd = ::CreateWindowExW(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE, wc.lpszClassName, _T("My Overylay"), WS_POPUP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, wc.hInstance, nullptr);
+
+  SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
+  const MARGINS margin = {-1, 0, 0, 0};
+  DwmExtendFrameIntoClientArea(hwnd, &margin);
+
+```
+
+initializing ImGui is really simple, as much as I would love to show it, this post is getting a bit long, but refer to: 
+> https://github.com/adamhlt/D3D11-Overlay-ImGui/ 
+> https://github.com/ocornut/imgui
+
+creating a running update loop is really simple too, apparently!
+
+
+```cpp
+
+	bool isRunning = true;
+
+	while (isRunning)
+	{
+	  MSG msg = { 0 };
+	
+	  // process windows messages
+	  while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+	  {
+	    TranslateMessage(&msg);
+	    DispatchMessage(&msg);
+	
+	    if (msg.message == WM_QUIT)
+	      isRunning = false;
+	  }
+	
+	  // handle exit conditions
+	  if (GetAsyncKeyState(VK_END) & 1)
+	    isRunning = false;
+	
+	  if (bTargetSet && !IsWindowAlive())
+	    isRunning = false;
+	
+	  if (!isRunning)
+	    break;
+	
+	  // keep overlay window aligned with target
+	  #ifdef _WINDLL
+	    if (hTargetWindow)
+	      MoveWindow(hwnd);
+	    else
+	      continue;
+	  #else
+	    if (hTargetWindow && bTargetSet)
+	      MoveWindow(hwnd);
+	  #endif
+	
+	  // clear overlay if target is not in focus
+	  if (bTargetSet && !IsWindowFocus(hwnd))
+	  {
+	    const float clearColor[4] = {
+	      clear_color.x * clear_color.w,
+	      clear_color.y * clear_color.w,
+	      clear_color.z * clear_color.w,
+	      clear_color.w
+	    };
+	
+	    DeviceContext->OMSetRenderTargets(1, &pMainRenderTargetView, nullptr);
+	    DeviceContext->ClearRenderTargetView(pMainRenderTargetView, clearColor);
+	    pSwapChain->Present(1, 0);
+	    continue;
+	  }
+	
+	  // start a new ImGui frame
+	  ImGui_ImplDX11_NewFrame();
+	  ImGui_ImplWin32_NewFrame();
+	  ImGui::NewFrame();
+	
+	  {
+	    Draw(); // <---- our imgui draw calls
+	  }
+	
+	  ImGui::EndFrame();
+	
+	  // Adjust input transparency depending on menu state
+	  LONG exStyle = WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TOOLWINDOW;
+	  if (Drawing::isActive())
+	    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+	  else
+	    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_TRANSPARENT);
+	
+	  // render ImGui frame
+	  ImGui::Render();
+	
+	  const float clearColor[4] = {
+	    clear_color.x * clear_color.w,
+	    clear_color.y * clear_color.w,
+	    clear_color.z * clear_color.w,
+	    clear_color.w
+	  };
+	
+	  DeviceContext->OMSetRenderTargets(1, &pMainRenderTargetView, nullptr);
+	  DeviceContext->ClearRenderTargetView(pMainRenderTargetView, clearColor);
+	  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	
+	  pSwapChain->Present(1, 0);
+	}
+	
+	//Clean up...
+
+  ImGui_ImplDX11_Shutdown();
+  ImGui_ImplWin32_Shutdown();
+  ImGui::DestroyContext();
+
+  CleanupDevice(); // a function that sets the SwapChain, DeviceContext and Device too null
+  ::DestroyWindow(hwnd);
+  ::UnregisterClass(wc.lpszClassName, wc.hInstance);
+
+```
+
+and that's basically it! I compiled my DLL and, with my fingers crossed, I injected it into our game using Process Hacker and boom! 
+My first mission was complete!
+
+![image](/static/images/hook.jpg)
+
+Stay tuned for more tomfoolery hehehe!

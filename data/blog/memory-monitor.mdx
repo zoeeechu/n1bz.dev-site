@@ -1,0 +1,247 @@
+---
+title: 'New and Delete are a LIE!!!'
+date: '2025-11-02'
+lastmod: '2025-11-02'
+tags: ['C++', 'Memory' ]
+draft: true
+summary: 'Keeping track of heap allocations and deallocations by overloading the new and delete operators and gathering data'
+images: ['/static/images/card.png']
+---
+
+
+Have you ever thought about what `new` and `delete` are? 
+Did you ever realize they were operators? 
+
+![image](/static/images/new-delete-meme.jpg)
+
+Operators! You say that's preposterous!!! Doesn't that mean...
+
+YUP, they don't actually exist the actual functions you are using are [malloc](https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm) and [free](https://www.tutorialspoint.com/c_standard_library/c_function_free.htm), which are C functions 
+for freeing and allocating memory.
+
+They take in the size of the object you're giving them, and they use that size to allocate or deallocate the right amount of memory. 
+So we can overload `new` and `delete` ourselves and do the same thing! Not only to see how it works, but we can also make it log to the console.
+
+Here's a simple example:
+
+Let's start by making a new pointer and then deleting it in our main function.
+
+```cpp
+ 
+int main(int argc, char* argv[])
+{
+
+  int* ptr = new int;  
+  delete ptr;
+  
+  return 0;
+}
+```
+
+Then we can add new operator overloads for `new` and `delete` to make them do what we want instead!
+
+Notice how they both take in a [size_t](https://www.geeksforgeeks.org/c/size_t-data-type-c-language/), which would be the size of the object given. 
+The only difference is that our `new` and `delete` print out the size so we can track it!
+
+```cpp
+void* operator new(std::size_t nBytes){
+
+  std::cout << "new size=" << nBytes << std::endl;
+  if (nBytes== 0)
+  {
+    ++nBytes;
+  }
+
+  if (void *ptr = malloc(nBytes))
+  {
+    return ptr;
+  }
+  
+  throw std::bad_alloc{};
+}
+
+void operator delete(void* ptr, std::size_t nBytes) noexcept
+{
+  std::cout << "delete ptr=" << ptr << " " << "size= " << nBytes << std::endl;
+  free(ptr);
+}
+
+```
+
+Now you may have noticed that we're only taking in non-array objects, so if we make a new vector or array or string and delete it, we shouldn't 
+get anything back and you're absolutely correct!
+
+How would we solve that... hmmmmmmmmmmm
+
+Why, by just putting a `[]` of course!
+
+
+
+```cpp
+void* operator new(std::size_t nBytes){
+  std::cout << "new size=" << nBytes << std::endl;
+  if (nBytes== 0)
+  {
+    ++nBytes;
+  }
+  if (void *ptr = malloc(nBytes))
+  {
+    return ptr;
+  }
+  throw std::bad_alloc{};
+}
+
+void* operator new[](std::size_t nBytes) {
+  std::cout << "new[] size = " << nBytes << std::endl;
+  if (nBytes == 0) {
+    ++nBytes;
+  }
+  if (void* ptr = std::malloc(nBytes)) {
+    return ptr;
+  }
+  throw std::bad_alloc{};
+}
+
+void operator delete(void* ptr, std::size_t nBytes) noexcept
+{
+  std::cout << "delete ptr=" << ptr << " " << "size= " << nBytes << std::endl;
+  free(ptr);
+}
+
+void operator delete[](void* ptr, std::size_t nBytes) noexcept
+{
+  std::cout << "delete ptr=" << ptr << " " << "size= " << nBytes << std::endl;
+  free(ptr);
+}
+
+void operator delete[](void* ptr) noexcept {
+  std::cout << "delete[] ptr = " << ptr << std::endl;
+  std::free(ptr);
+}
+
+void operator delete(void* ptr) noexcept
+{
+  std::cout << "delete ptr=" << ptr << std::endl;
+  free(ptr);
+}
+
+  
+```
+
+Great! it should work now right? lets test it out...
+```cpp
+int main(int argc, char* argv[])
+{
+
+  int* arr = new int[10];
+  delete[] arr;
+  
+  return 0;
+}
+```
+great we get a console out! wait...HUH
+where is our delete size? 
+```bash
+> new[] size=40
+
+```
+Turns out that Microsoft doesn't let us get that size ONLY when deleting a `[]` type. 
+How are we supposed to solve this?
+
+That is the problem our teacher gave us to solve... so how did I figure it out? 
+Let me walk you through the steps.
+
+Before I walk you through this, I need you to understand how memory works. You see, memory is represented in base-16 hexadecimal format.
+```
+ Base-10 | Base-2 | Base-16
+---------+--------+--------
+ 0    | 0   | 0
+ 1    | 1   | 1
+ 2    | 10   | 2
+ 3    | 11   | 3
+ 4    | 100  | 4
+ 5    | 101  | 5
+ 6    | 110  | 6
+ 7    | 111  | 7
+ 8    | 1000  | 8
+ 9    | 1001  | 9
+ 10   | 1010  | A
+ 11   | 1011  | B
+ 12   | 1100  | C
+ 13   | 1101  | D
+ 14   | 1110  | E
+ 15   | 1111  | F
+```
+> Source: https://www.catalyst2.com/knowledgebase/dictionary/hexadecimal-base-16-numbers/
+
+If we check out this handy table that shows us how to count in base 16, we can see that base 16 is the same as counting normally  
+the same math applies, so `D - 3 = A`.
+
+Great, so now that we've established that, let's move to how to solve this problem.
+
+Since a memory address points to the start of a block of memory, subtracting 4 from that block of memory gives you the memory address 4 spaces before. 
+![image](/static/images/memory.png)
+
+So what if we allocated 4 extra bytes of memory enough to store an `int` that holds the size of our array! 
+Then we stick that `int` at the front and return a pointer to the original memory address plus 4, or `sizeof(int)`, 
+so the user gets the pointer to the memory address of the object they allocated and that `int` will be our little secret hehe. 
+Then we can just check the `int` by going backwards by 4, or `sizeof(int)`, and get our size!
+
+
+
+```cpp 
+void* operator new[](std::size_t size){
+
+  if (size== 0)
+  {
+    ++size;
+  }
+
+  void* pointer = std::malloc(size + sizeof(size_t));
+  if (!pointer) throw std::bad_alloc();
+
+  //store size at the front
+  *(size_t*)pointer = size;
+
+  /*
+  
+    size new ptr    
+     |//| |//////////////////////////////////|
+    |  |
+    (*) (* + size_t)
+  */
+  // convert to char so we can shift the ptr and hide the size
+  // 006AE4 <- ex. memory address with (* + size_t)
+  // 006AE0 <- ex. memory without size_t
+  char* ptr_char = (char*)pointer;
+
+  // new_ptr points to the same memory block just shifted over to hide the size
+  void* new_ptr = ptr_char + sizeof(size_t);
+
+  std::cout << "new[] size=" << size << std::endl;
+  return (void*)(new_ptr);
+
+}
+
+
+void operator delete[](void* ptr) noexcept
+{
+  // we re shift to the orginal block of memory and store it as pointer
+  void* pointr = (char*)ptr - sizeof(size_t);
+
+  //lets grab da size from the front
+  size_t size = *(size_t*)pointr;
+
+  std::cout << "delete ptr=" << ptr << " sizeofa(" << size << ")" << std::endl;
+  free(pointr);
+}
+
+```
+
+And there we go it works! We get
+
+```bash
+> new[] size=40
+> delete ptr=0x1de2a7d6778 sizeofa(40)
+```
+Hooray!

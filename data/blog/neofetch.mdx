@@ -4,50 +4,49 @@ date: '2023-08-19'
 lastmod: '2023-08-19'
 tags: ['Arch', 'Neofetch', 'Guide', 'jp2a', 'Linux']
 draft: false
-summary: 'Mastering Neofetch Customization to Showcase Your Logo in Style!'
+summary: 'Customizing my NeoFetch Logo and making it sick'
 images: ['/static/images/card.png']
 ---
-*[alt title]: **Personalizing Neofetch: Adding Your Signature Logo for a Unique Touch***
 
---- 
+Recently, I was setting up a new Arch installation and **REALLY** wanted to put [n1bz](https://www.n1bz.dev/blog/welcome) as a 
+custom Neofetch logo just imagine how cool that would be!
 
-Recently, I was setting up a new Arch installation recently and **REALLY** wanted to put [n1bz](https://www.n1bz.dev/blog/welcome) as a
-custom Neofetch logo – just imagine how cool that would be!
+After researching, I was getting bits and pieces of answers, but not the complete 
+answer I was looking for. It was weird that I couldn’t find anything on it, but I figured how hard could it be? 
+And spoiler alert, it actually wasn’t hard at all!
 
-Upon researching, I was getting bits and pieces of answers, but not the complete
-answer I was seeking. It seemed like this was something that hadn't been fully addressed. This was puzzling, especially because the community seemed to deem it as a straightforward task – and spoiler alert, it actually was!
+So in case you end up with the same issue, here ya go here’s how to do it, you’re welcome.
 
-Nevertheless, I decided to share my findings for those who might encounter the same issue.
-Consider this your guide if you stumble upon this problem too!
+So, grab your custom logo and a cup of coffee, and let's dive right in! 
+> Quick note: Any logo format like PNG, JPEG, etc. will work, but I'd suggest PNG for extra flair.
 
-So, grab your custom logo and a cup of coffee, and let's dive right in!
-> Quick note: Any logo format like PNG, JPEG, etc. would work, but I'd suggest PNG for extra flair.
-
-For this mini project, we need to edit the *'config.conf'* file, which should be located here:
+For this mini project, we need to edit the *config.conf* file, which should be located here: 
 `~/.config/neofetch/config.conf`
 
-But before we jump in, let's start by installing [*jp2a*](https://github.com/cslarsen/jp2a) – we'll need it for this project.
-> Note: 'jp2a' is a tool that transforms images into ASCII art.
+But before we start, let's install [*jp2a*](https://github.com/cslarsen/jp2a) we'll need it for this project. 
+> Note: *jp2a* is a tool that transforms images into ASCII art.
 
-To install [*jp2a,*](https://github.com/cslarsen/jp2a) execute this command:
+To install [*jp2a*](https://github.com/cslarsen/jp2a), execute this command:
+```bash
+> sudo pacman -S jp2a
 ```
-sudo pacman -S jp2a
-```
 
-Now, you'll need to locate two lines – `# Image backend` and `# Image Source`  usually found at the top of
-`# Backend Settings` section.
+Now, you'll need to find two lines `# Image backend` and `# Image Source` usually found at the top of 
+the `# Backend Settings` section.
 
-First, we'll switch out `image_backend="ascii"` with `image_backend="jp2a"`; naturally, feel free to
-experiment with other options and play around!
+First, we'll switch out `image_backend="ascii"` with `image_backend="jp2a"`. Feel free to fuck around and 
+experiment with other options!
 
 Next, let's replace `image_source="auto"` with `image_source="/path/to/your/logo.png"`.
 
-With these changes made, don't forget to save the file. You're almost good to go!
-To see the magic in action, put it to the test by entering the command:
-```
-neofetch
+After that, we hit save and see the magic, hehehe.
+
+```bash
+> neofetch
 ```
 
 ![TimeLine](/static/images/neofetch.png)
 
-And there you have it!, with a bit of experimentation you've woven your Neofetch to be uniquely yours! 🚀🎨
+There we go! We now have our very own personalized Neofetch!
+
+
