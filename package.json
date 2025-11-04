@@ -2,6 +2,10 @@
   "name": "tailwind-nextjs-starter-blog",
   "version": "2.0.0",
   "private": true,
+
+    "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "start": "next dev",
     "dev": "cross-env INIT_CWD=$PWD next dev",
