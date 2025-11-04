@@ -7,6 +7,7 @@ const siteMetadata = {
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.n1bz.dev',
+  generateRobotsTxt: false,
   siteRepo: 'https://github.com/zoeeechu/n1bz.dev-site',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/card.png',
