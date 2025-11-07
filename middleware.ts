@@ -9,6 +9,7 @@ export function middleware(request: NextRequest) {
     const html = `
       <!DOCTYPE html>
       <html>
+        <meta name="robots" content="noindex">
         <head>
           <title>502 Bad Gateway</title>
           <style>
