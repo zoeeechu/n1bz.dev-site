@@ -1,4 +1,3 @@
-import siteMetadata from '@/data/siteMetadata'
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
@@ -9,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/', 
       },
     ],
-    sitemap: `${siteMetadata.siteUrl}/sitemap.xml`,
-    host: siteMetadata.siteUrl,
+    sitemap: '',
+    host: 'https://example.com',
   }
 }
