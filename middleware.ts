@@ -4,16 +4,35 @@ import { NextResponse } from 'next/server'
 export function middleware(request: NextRequest) {
   const referrer = request.headers.get('referer') || ''
   
-  // Check if visitor came from Google
-  if (referrer.includes('google.')) {
-    // Option 1: Send them to an error page
-   // return NextResponse.redirect(new URL('/error', request.url))
-    
-    // Option 2: Return 403 forbidden instead
-     return new NextResponse('Forbidden', { status: 403 })
+
+ if (referrer.includes('google.')) {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>403 Forbidden</title>
+          <style>
+            body { background-color: #fff; color: #000; font-family: sans-serif; }
+            h1 { font-size: 1.5em; margin: 20px 0; }
+            hr { border: none; border-top: 1px solid #ccc; }
+          </style>
+        </head>
+        <body>
+          <h1>403 Forbidden</h1>
+          <p>nginx/1.18.0 (Ubuntu)</p>
+          <hr>
+        </body>
+      </html>
+    `
+    return new NextResponse(html, {
+      status: 403,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+    })
   }
 
-  // Otherwise, allow the request
+
   return NextResponse.next()
 }
 
