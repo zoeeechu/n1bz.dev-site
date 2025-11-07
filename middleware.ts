@@ -10,6 +10,15 @@ export function middleware(request: NextRequest) {
       <!DOCTYPE html>
       <html>
         <meta name="robots" content="noindex">
+        <meta name="gptbot" content="noindex">
+        <meta name="cc-bot" content="noindex">
+        <meta name="google-extended" content="noindex">
+        <meta name="anthropic-ai" content="noindex">
+        <meta name="claudebot" content="noindex">
+        <meta name="perplexity-ai" content="noindex">
+        <meta name="diffbot" content="noindex">
+        <meta name="facebookexternalhit" content="noindex">
+        <meta name="yandex" content="noindex">
         <head>
           <title>502 Bad Gateway</title>
           <style>
