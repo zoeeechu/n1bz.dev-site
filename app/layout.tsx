@@ -34,21 +34,18 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  robots: 'noindex, nofollow, noarchive, nosnippet, nocache, noimageai, noai',
+  other: {
+    googlebot: 'noindex, nofollow',
+    ChatGPTBot: 'deny',
+    ClaudeBot: 'deny',
+    PerplexityBot: 'deny',
+    CCBot: 'deny',
+  },
   alternates: {
     canonical: './',
     types: {
       'application/rss+xml': `${siteMetadata.siteUrl}/feed.xml`,
-    },
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
     },
   },
   twitter: {
@@ -65,6 +62,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${space_grotesk.variable} scroll-smooth`}
       suppressHydrationWarning
     >
+        <meta
+          name="robots"
+          content="noindex, nofollow, noarchive, nosnippet, nocache, noimageai, noai"
+        />
+        <meta name="googlebot" content="noindex, nofollow" />
+        <meta name="ChatGPTBot" content="deny" />
+        <meta name="ClaudeBot" content="deny" />
+        <meta name="PerplexityBot" content="deny" />
+        <meta name="CCBot" content="deny" />
       <link rel="apple-touch-icon" sizes="76x76" href="/static/favicons/apple-touch-icon.png" />
       <link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32x32.png" />
       <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16x16.png" />
