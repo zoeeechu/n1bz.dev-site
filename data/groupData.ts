@@ -1,5 +1,11 @@
 const groupData = [
   {
+    title: 'PLUI',
+    description: `A game dev group`,
+    imgSrc: '/static/images/plui-banner.png',
+    href: 'https://github.com/PLUI-Games/',
+  },
+  {
     title: 'Blueberry Muffin',
     description: `A game dev group`,
     imgSrc: '/static/images/bbm.png',

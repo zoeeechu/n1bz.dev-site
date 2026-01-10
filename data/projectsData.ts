@@ -2,7 +2,7 @@ const projectsData = [
   {
     title: 'StarStruck Engine',
     description: `A multipurpose (ECS) based game engine, made from scratch using Vulkan, SDL, OpenGL, C++ and Lua!`,
-    imgSrc: '/static/images/StarStruck_Banner.jpg',
+    imgSrc: '/static/images/StarStruck_Banner.png',
     href: 'https://github.com/StarStruckEngine/StarStruck',
   },
   {
