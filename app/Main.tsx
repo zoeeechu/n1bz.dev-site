@@ -6,6 +6,8 @@ import siteMetadata from '@/data/siteMetadata'
 import { useTheme } from 'next-themes'
 import { formatDate } from 'pliny/utils/formatDate'
 
+import Card from '@/components/Card'
+import projectsData from '@/data/projectsData'
 const MAX_DISPLAY = 5
 
 export default function Home({ posts }) {
@@ -13,8 +15,34 @@ export default function Home({ posts }) {
 
   return (
     <>
+    
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
+
+
+          <>
+           <div className="divide-y divide-gray-200 dark:divide-gray-700">
+             <div className="space-y-2 pb-8 pt-6 md:space-y-5">
+               <h1 className="text-2xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+                 <RollingRevealText >Recent Projects</RollingRevealText>
+               </h1>
+             </div>
+             <div className="container py-8">
+               <div className="-m-4 flex flex-wrap">
+                 {projectsData.slice(0, 2).map((d)  => (
+                   <Card
+                     key={d.title}
+                     title={d.title}
+                     description={d.description}
+                     imgSrc={d.imgSrc}
+                     href={d.href}
+                   />
+                 ))}
+               </div>
+             </div>
+           </div>
+         </>
+
 
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
               <RollingRevealText >Latest</RollingRevealText>
