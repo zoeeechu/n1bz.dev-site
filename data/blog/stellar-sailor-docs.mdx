@@ -1,0 +1,1164 @@
+---
+title: 'Technical Documentation on Stellar Sailor'
+date: '2026-04-19'
+lastmod: '2026-04-19'
+tags: [
+ 'TypeScript',
+ 'WebGL',
+ 'CodeDocs',
+ 'Graphics Programming',
+]
+draft: false
+summary: 'The technical docs of Stellar Sailors code.'
+images: ['/static/images/card.png']
+---
+
+- [animationRegistry](#animationRegistry) 
+- [animationRunner](#animationRunner) 
+- [audioManager](#audioManager) 
+- [blockly/blocks/events](#blockly.blocks.events) 
+- [blockly/blocks/led](#blockly.blocks.led) 
+- [blockly/blocks/ledgrid](#blockly.blocks.ledgrid) 
+- [blockly/blocks/text](#blockly.blocks.text) 
+- [blockly/generators/events](#blockly.generators.events) 
+- [blockly/generators/javascript](#blockly.generators.javascript) 
+- [blockly/generators/led](#blockly.generators.led) 
+- [blockly/generators/ledgrid](#blockly.generators.ledgrid) 
+- [blockly/runner](#blockly.runner) 
+- [blockly/serialization](#blockly.serialization) 
+- [blockly/theme](#blockly.theme) 
+- [blockly/toolbox](#blockly.toolbox) 
+- [DialogueManager](#DialogueManager) 
+- [DialogueParser](#DialogueParser) 
+- [DPlayerRecipe](#PlayerRecipe) 
+- [globals](#globals) 
+- [PlayerAvatar](#PlayerAvatar) 
+- [sceneManager](#sceneManager) 
+- [scenes/CharecterCustomizer](#scenes.CharecterCustomizer) 
+- [scenes/ControlPanel](#scenes.ControlPanel) 
+- [sceneTransition](#sceneTransition) 
+- [scripts/ControlPanel/LEDGrid](#scripts.ControlPanel.LEDGrid) 
+- [scripts/Printer/GeneratePrint](#scripts.Printer.GeneratePrint) 
+
+
+<a name="animationRegistry"></a>
+## AnimationData
+
+### Properties
+
+#### length
+
+> **length**: `number`
+
+#### loop\_mode
+
+> **loop\_mode**: `number`
+
+#### name
+
+> **name**: `string`
+
+#### tracks
+
+> **tracks**: [`Track`](#track)[]
+
+***
+
+## Key
+
+### Properties
+
+#### time
+
+> **time**: `number`
+
+#### value
+
+> **value**: `any`
+
+***
+
+## Track
+
+### Properties
+
+#### interp
+
+> **interp**: `number`
+
+#### keys
+
+> **keys**: [`Key`](#key)[]
+
+#### length
+
+> **length**: `number`
+
+#### path
+
+> **path**: `string`
+
+#### type
+
+> **type**: `number`
+
+***
+
+## animationRegistryMap
+
+> **animationRegistryMap**: `Map`\<`string`, [`AnimationData`](#animationdata)\>
+
+***
+
+## loadAnimations()
+
+> **loadAnimations**(`path`): `Promise`\<`void`\>
+
+### Parameters
+
+#### path
+
+`string`
+
+### Returns
+
+`Promise`\<`void`\>
+
+
+***
+
+## target
+
+> **target** = `any`
+
+***
+
+## buildAnimations()
+
+> **buildAnimations**(`anim_name`, `target`, `property`, `keys`, `loop_mode`, `length`, `fps?`): `void`
+
+### Parameters
+
+#### anim\_name
+
+`string`
+
+#### target
+
+`any`
+
+#### property
+
+`string`
+
+#### keys
+
+[`Key`](animationRegistry.md#key)[]
+
+#### loop\_mode
+
+`number`
+
+#### length
+
+`number`
+
+#### fps?
+
+`number` = `60`
+
+### Returns
+
+`void`
+
+***
+<a name="animationRunner"></a>
+## RunAnimation()
+
+> **RunAnimation**(`animation_name`, `name_of_animation_obj_path`, `target_obj`): `void`
+
+### Parameters
+
+#### animation\_name
+
+`string`
+
+#### name\_of\_animation\_obj\_path
+
+`string`
+
+#### target\_obj
+
+`any`
+
+### Returns
+
+`void`
+
+
+***
+<a name="audioManager"></a>
+
+## audioManager
+
+> `const` **audioManager**: `AudioManager`
+
+***
+
+## playDialogueAudio()
+
+> **playDialogueAudio**(`fileUrl`, `volume?`): `void`
+
+### Parameters
+
+#### fileUrl
+
+`string`
+
+#### volume?
+
+`number` = `0.5`
+
+### Returns
+
+`void`
+
+***
+
+## playSfx()
+
+> **playSfx**(`fileUrl`, `volume?`): `void`
+
+### Parameters
+
+#### fileUrl
+
+`string`
+
+#### volume?
+
+`number` = `0.3`
+
+### Returns
+
+`void`
+
+***
+
+## warmUpSfx()
+
+> **warmUpSfx**(): `Promise`\<`void`\>
+
+### Returns
+
+`Promise`\<`void`\>
+
+
+***
+
+<a name="blockly.blocks.events"></a>
+## eventBlocks 
+> `const` **eventBlocks**: `object` 
+
+***
+
+<a name="blockly.blocks.led"></a>
+## ledBlocks 
+> `const` **ledBlocks**: `object`
+
+***
+
+<a name="blockly.blocks.ledgrid"></a>
+## ledGridBlocks 
+> `const` **ledGridBlocks**: `object` 
+
+***
+
+<a name="blockly.blocks.text"></a>
+## blocks 
+> `const` **blocks**: `object`
+
+***
+
+<a name="blockly.generators.events"></a>
+## eventGenerators 
+> `const` **eventGenerators**: `Record`\<`string`, (`block`, `generator`) => `string`\> 
+
+***
+
+<a name="blockly.generators.javascript"></a>
+## forBlock 
+> `const` **forBlock**: `any` 
+
+***
+
+<a name="blockly.generators.led"></a>
+## ledGenerators 
+> `const` **ledGenerators**: `Record`\<`string`, (`block`, `generator`) => `string`\> 
+
+***
+
+<a name="blockly.generators.ledgrid"></a>
+## ledGridGenerators 
+> `const` **ledGridGenerators**: `Record`\<`string`, (`block`, `generator`) => `string`\> 
+
+***
+
+<a name="blockly.runner"></a>
+## runWorkspace() 
+> **runWorkspace**(`ws`): `Promise`\<`void`\> 
+
+***
+
+## stopWorkspace() 
+> **stopWorkspace**(): `void` 
+
+***
+
+<a name="blockly.serialization"></a>
+## load() 
+> **load**(`workspace`): `void` 
+
+***
+
+## save() 
+> **save**(`workspace`): `void` 
+Saves the state of the workspace to browser's local storage.
+
+### Parameters
+
+#### workspace
+
+`Workspace`
+
+Blockly workspace to save.
+
+### Returns
+
+`void`
+
+
+***
+<a name="blockly.theme"></a>
+## StarlightTheme
+
+> `const` **StarlightTheme**: `Theme`
+
+
+***
+<a name="blockly.toolbox"></a>
+## toolbox
+
+> `const` **toolbox**: `object`
+
+### Type Declaration
+
+#### contents
+
+> **contents**: (\{ `categorystyle?`: `undefined`; `colour`: `number`; `contents`: (\{ `inputs`: \{ `LED`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; \}; `kind`: `string`; `type`: `string`; \} \| \{ `inputs?`: `undefined`; `kind`: `string`; `type`: `string`; \})[]; `custom?`: `undefined`; `kind`: `string`; `name`: `string`; \} \| \{ `categorystyle?`: `undefined`; `colour`: `number`; `contents`: (\{ `inputs?`: `undefined`; `kind`: `string`; `type`: `string`; \} \| \{ `inputs`: \{ `X`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `Y`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; \}; `kind`: `string`; `type`: `string`; \})[]; `custom?`: `undefined`; `kind`: `string`; `name`: `string`; \} \| \{ `categorystyle`: `string`; `colour?`: `undefined`; `contents`: (\{ `inputs`: \{ `BY?`: `undefined`; `FROM?`: `undefined`; `TIMES`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `TO?`: `undefined`; \}; `kind`: `string`; `type`: `string`; \} \| \{ `inputs?`: `undefined`; `kind`: `string`; `type`: `string`; \} \| \{ `inputs`: \{ `BY`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `FROM`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `TIMES?`: `undefined`; `TO`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; \}; `kind`: `string`; `type`: `string`; \})[]; `custom?`: `undefined`; `kind`: `string`; `name`: `string`; \} \| \{ `categorystyle`: `string`; `colour?`: `undefined`; `contents`: (\{ `fields`: \{ `NUM`: `number`; \}; `inputs?`: `undefined`; `kind`: `string`; `type`: `string`; \} \| \{ `fields?`: `undefined`; `inputs`: \{ `A`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `B`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `FROM?`: `undefined`; `TO?`: `undefined`; \}; `kind`: `string`; `type`: `string`; \} \| \{ `fields?`: `undefined`; `inputs`: \{ `A?`: `undefined`; `B?`: `undefined`; `FROM`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; `TO`: \{ `shadow`: \{ `fields`: \{ `NUM`: ...; \}; `type`: `string`; \}; \}; \}; `kind`: `string`; `type`: `string`; \})[]; `custom?`: `undefined`; `kind`: `string`; `name`: `string`; \} \| \{ `categorystyle?`: `undefined`; `colour?`: `undefined`; `contents?`: `undefined`; `custom?`: `undefined`; `kind`: `string`; `name?`: `undefined`; \} \| \{ `categorystyle`: `string`; `colour?`: `undefined`; `contents?`: `undefined`; `custom`: `string`; `kind`: `string`; `name`: `string`; \})[]
+
+#### kind
+
+> **kind**: `string` = `'categoryToolbox'`
+
+
+***
+<a name="DialogueManager"></a>
+## DialogueManager
+
+### Constructors
+
+#### Constructor
+
+> **new DialogueManager**(`scene`): [`DialogueManager`](#dialoguemanager)
+
+##### Parameters
+
+###### scene
+
+`Scene`
+
+##### Returns
+
+[`DialogueManager`](#dialoguemanager)
+
+### Properties
+
+#### finishedPromise
+
+> **finishedPromise**: `Promise`\<`void`\>
+
+### Methods
+
+#### loadAndStart()
+
+> **loadAndStart**(`filePath`): `Promise`\<`void`\>
+
+##### Parameters
+
+###### filePath
+
+`string`
+
+##### Returns
+
+`Promise`\<`void`\>
+
+#### setupBunnyAnimations()
+
+> **setupBunnyAnimations**(`b`): `void`
+
+##### Parameters
+
+###### b
+
+`AnimationGroup`[]
+
+##### Returns
+
+`void`
+
+#### setVariable()
+
+> **setVariable**(`key`, `value`): `void`
+
+##### Parameters
+
+###### key
+
+`string`
+
+###### value
+
+`string`
+
+##### Returns
+
+`void`
+
+#### userClicked()
+
+> **userClicked**(): `void`
+
+##### Returns
+
+`void`
+
+
+***
+<a name="DialogueParser"></a>
+## DialogueParser
+
+### Constructors
+
+#### Constructor
+
+> **new DialogueParser**(): [`DialogueParser`](#dialogueparser)
+
+##### Returns
+
+[`DialogueParser`](#dialogueparser)
+
+### Methods
+
+#### parse()
+
+> `static` **parse**(`raw`): [`DialogueInstruction`](#dialogueinstruction)[]
+
+##### Parameters
+
+###### raw
+
+`string`
+
+##### Returns
+
+[`DialogueInstruction`](#dialogueinstruction)[]
+
+***
+
+## DialogueInstruction
+
+> **DialogueInstruction** = \{ `args`: `string`[]; `command`: `string`; `type`: `"ACTION"`; \} \| \{ `name`: `string`; `side`: `string`; `text`: `string`; `type`: `"TEXT"`; \} \| \{ `options`: `object`[]; `type`: `"CHOICE"`; \} \| \{ `target`: `string`; `type`: `"JUMP"`; \} \| \{ `name`: `string`; `type`: `"LABEL"`; \}
+
+
+***
+<a name="PlayerRecipe"></a>
+## PlayerRecipe
+
+### Properties
+
+#### backHairIndex
+
+> **backHairIndex**: `number`
+
+#### bangsIndex
+
+> **bangsIndex**: `number`
+
+#### colors
+
+> **colors**: `object`
+
+##### backHair
+
+> **backHair**: `string`
+
+##### bangs
+
+> **bangs**: `string`
+
+##### glasses
+
+> **glasses**: `string`
+
+##### pupils
+
+> **pupils**: `string`
+
+#### equipment
+
+> **equipment**: `object`
+
+##### hearingAidL
+
+> **hearingAidL**: `boolean`
+
+##### hearingAidR
+
+> **hearingAidR**: `boolean`
+
+##### patchL
+
+> **patchL**: `boolean`
+
+##### patchR
+
+> **patchR**: `boolean`
+
+#### eyesIndex
+
+> **eyesIndex**: `number`
+
+#### glassesIndex
+
+> **glassesIndex**: `number`
+
+#### playerName
+
+> **playerName**: `string`
+
+#### skinIndex
+
+> **skinIndex**: `number`
+
+***
+<a name="globals"></a>
+## currentPlayerData
+
+> **currentPlayerData**: [`PlayerRecipe`](#playerrecipe) \| `null` = `null`
+
+***
+
+## gameAnimations
+
+> `const` **gameAnimations**: `string`[]
+
+***
+
+## isDebugMode
+
+> `const` **isDebugMode**: `boolean`
+
+***
+
+## isTouchDevice
+
+> `const` **isTouchDevice**: `boolean`
+
+***
+
+## mainScene
+
+> `const` **mainScene**: `"Menu"` = `"Menu"`
+
+***
+
+## playerName
+
+> **playerName**: `string` = `""`
+
+***
+
+## loadPlayerData()
+
+> **loadPlayerData**(): `void`
+
+### Returns
+
+`void`
+
+***
+
+## setPlayerData()
+
+> **setPlayerData**(`data`): `void`
+
+### Parameters
+
+#### data
+
+[`PlayerRecipe`](#playerrecipe)
+
+### Returns
+
+`void`
+
+***
+
+## setPlayerName()
+
+> **setPlayerName**(`name`): `void`
+
+### Parameters
+
+#### name
+
+`string`
+
+### Returns
+
+`void`
+**project-starlight-web**
+
+***
+
+<a name="PlayerAvatar"></a>
+## PlayerAvatar
+
+### Constructors
+
+#### Constructor
+
+> **new PlayerAvatar**(`scene`): [`PlayerAvatar`](#playeravatar)
+
+##### Parameters
+
+###### scene
+
+`Scene`
+
+##### Returns
+
+[`PlayerAvatar`](#playeravatar)
+
+### Methods
+
+#### spawn()
+
+> **spawn**(`pos`, `scale`): `Promise`\<`AbstractMesh`\>
+
+##### Parameters
+
+###### pos
+
+`Vector3`
+
+###### scale
+
+`number`
+
+##### Returns
+
+`Promise`\<`AbstractMesh`\>
+
+
+***
+<a name="sceneManager"></a>
+
+## getCurrentScene()
+
+> **getCurrentScene**(): `Scene`
+
+### Returns
+
+`Scene`
+
+***
+
+## loadScene()
+
+> **loadScene**(`name`, `engine`): `Promise`\<`Scene`\>
+
+### Parameters
+
+#### name
+
+`string`
+
+#### engine
+
+`Engine`
+
+### Returns
+
+`Promise`\<`Scene`\>
+
+***
+
+## setCurrentScene()
+
+> **setCurrentScene**(`scene`): `void`
+
+### Parameters
+
+#### scene
+
+`Scene`
+
+### Returns
+
+`void`
+
+
+***
+<a name="scenes.CharecterCustomizer"></a>
+
+## createPlayer()
+
+> **createPlayer**(`scene`): `Promise`\<`void`\>
+
+### Parameters
+
+#### scene
+
+`Scene`
+
+### Returns
+
+`Promise`\<`void`\>
+
+***
+
+## default()
+
+> **default**(`scene`, `_dialogue`, `onComplete`): `void`
+
+### Parameters
+
+#### scene
+
+`Scene`
+
+#### \_dialogue
+
+[`DialogueManager`](DialogueManager.md#dialoguemanager)
+
+#### onComplete
+
+(`recipe`) => `void`
+
+### Returns
+
+`void`
+
+***
+
+## startCustomizing()
+
+> **startCustomizing**(`scene`): `void`
+
+### Parameters
+
+#### scene
+
+`Scene`
+
+### Returns
+
+`void`
+
+
+***
+<a name="scenes.ControlPanel"></a>
+
+## default()
+
+> **default**(`engine`): `Scene`
+
+### Parameters
+
+#### engine
+
+`Engine`
+
+### Returns
+
+`Scene`
+
+***
+
+## getLEDGrid()
+
+> **getLEDGrid**(): [`LEDGrid`](scripts.ControlPanel.LEDGrid.md#ledgrid)
+
+### Returns
+
+[`LEDGrid`](scripts.ControlPanel.LEDGrid.md#ledgrid)
+
+***
+
+## setLed()
+
+> **setLed**(`index`, `colorHex`): `void`
+
+### Parameters
+
+#### index
+
+`number`
+
+#### colorHex
+
+`string`
+
+### Returns
+
+`void`
+
+***
+
+## turnOffAllLeds()
+
+> **turnOffAllLeds**(): `void`
+
+### Returns
+
+`void`
+
+***
+
+## turnOffLed()
+
+> **turnOffLed**(`index`): `void`
+
+### Parameters
+
+#### index
+
+`number`
+
+### Returns
+
+`void`
+
+
+
+***
+<a name="sceneTransition"></a>
+
+## default()
+
+> **default**(`engine`): `Scene`
+
+### Parameters
+
+#### engine
+
+`Engine`
+
+### Returns
+
+`Scene`
+
+
+***
+
+## PreLoadTransitionToScene()
+
+> **PreLoadTransitionToScene**(`duration`, `name`, `engine`): `Promise`\<`void`\>
+
+### Parameters
+
+#### duration
+
+`number`
+
+#### name
+
+`string`
+
+#### engine
+
+`Engine`
+
+### Returns
+
+`Promise`\<`void`\>
+
+***
+
+## TransitionToScene()
+
+> **TransitionToScene**(`duration`, `name`, `engine`): `Promise`\<`void`\>
+
+### Parameters
+
+#### duration
+
+`number`
+
+#### name
+
+`string`
+
+#### engine
+
+`Engine`
+
+### Returns
+
+`Promise`\<`void`\>
+
+
+***
+
+## createHeaderRow()
+
+> **createHeaderRow**(`__namedParameters`): `HTMLDivElement`
+
+### Parameters
+
+#### \_\_namedParameters
+
+`HeaderRowOptions`
+
+### Returns
+
+`HTMLDivElement`
+
+***
+
+## getActiveHeaderIndex()
+
+> **getActiveHeaderIndex**(): `number`
+
+### Returns
+
+`number`
+
+***
+
+## setHeaderIcon()
+
+> **setHeaderIcon**(`iconSrc`, `index`, `customWidth?`): `void`
+
+### Parameters
+
+#### iconSrc
+
+`string`
+
+#### index
+
+`number`
+
+#### customWidth?
+
+`number` = `null`
+
+### Returns
+
+`void`
+
+
+***
+<a name="scripts.ControlPanel.LEDGrid"></a>
+## LEDGrid
+
+### Constructors
+
+#### Constructor
+
+> **new LEDGrid**(`scene`, `parent?`): [`LEDGrid`](#ledgrid)
+
+##### Parameters
+
+###### scene
+
+`Scene`
+
+###### parent?
+
+`TransformNode`
+
+##### Returns
+
+[`LEDGrid`](#ledgrid)
+
+### Accessors
+
+#### rootNode
+
+##### Get Signature
+
+> **get** **rootNode**(): `TransformNode`
+
+###### Returns
+
+`TransformNode`
+
+### Methods
+
+#### clearAll()
+
+> **clearAll**(): `void`
+
+##### Returns
+
+`void`
+
+#### clearPixel()
+
+> **clearPixel**(`x`, `y`): `void`
+
+##### Parameters
+
+###### x
+
+`number`
+
+###### y
+
+`number`
+
+##### Returns
+
+`void`
+
+#### getCursorX()
+
+> **getCursorX**(): `number`
+
+##### Returns
+
+`number`
+
+#### getCursorY()
+
+> **getCursorY**(): `number`
+
+##### Returns
+
+`number`
+
+#### getLitPixelCount()
+
+> **getLitPixelCount**(): `number`
+
+##### Returns
+
+`number`
+
+#### moveCursor()
+
+> **moveCursor**(`dx`, `dy`): `void`
+
+##### Parameters
+
+###### dx
+
+`number`
+
+###### dy
+
+`number`
+
+##### Returns
+
+`void`
+
+#### setCursorX()
+
+> **setCursorX**(`x`): `void`
+
+##### Parameters
+
+###### x
+
+`number`
+
+##### Returns
+
+`void`
+
+#### setCursorY()
+
+> **setCursorY**(`y`): `void`
+
+##### Parameters
+
+###### y
+
+`number`
+
+##### Returns
+
+`void`
+
+#### setPixel()
+
+> **setPixel**(`x`, `y`, `color`): `void`
+
+##### Parameters
+
+###### x
+
+`number`
+
+###### y
+
+`number`
+
+###### color
+
+`Color3`
+
+##### Returns
+
+`void`
+
+#### setPixelAtCursor()
+
+> **setPixelAtCursor**(`color`): `void`
+
+##### Parameters
+
+###### color
+
+`Color3`
+
+##### Returns
+
+`void`
+
+
+***
+<a name="scripts.Printer.GeneratePrint"></a>
+## generatePrintImage()
+
+> **generatePrintImage**(`scene`, `framePath`): `Promise`\<`string`\>
+
+### Parameters
+
+#### scene
+
+`Scene`
+
+#### framePath
+
+`string`
+
+### Returns
+
+`Promise`\<`string`\>
